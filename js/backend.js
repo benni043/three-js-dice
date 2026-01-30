@@ -49,7 +49,14 @@ function simulateDiceRoll(serverSeed = 3, diceSize = 2) {
     body.angularVelocity.setZero();
 
     body.position = new CANNON.Vec3(6, i * (diceSize * 1.5), 0);
-    body.quaternion.setFromEuler(2 * Math.PI * rng(), 0, 2 * Math.PI * rng());
+    const rx = 2 * Math.PI * rng();
+    const rz = 2 * Math.PI * rng();
+
+    const q = new CANNON.Quaternion();
+    q.setFromEuler(rx, 0, rz, "XYZ");
+
+    body.quaternion.copy(q);
+
 
     const force = 3 + 5 * rng();
     body.applyImpulse(
@@ -61,10 +68,39 @@ function simulateDiceRoll(serverSeed = 3, diceSize = 2) {
     diceBodies.push(body);
   }
 
-  return diceBodies.map((body) => {
-    console.log(getDiceResult(body));
-    return getDiceResult(body);
-  });
+  const FIXED_TIME_STEP = 1 / 60;
+  const MAX_STEPS = 10000;
+
+  let steps = 0;
+
+  while (steps < MAX_STEPS) {
+    physicsWorld.step(FIXED_TIME_STEP);
+    steps++;
+
+    let allStable = true;
+
+    for (const body of diceBodies) {
+      // Noch nicht schläft → weiter simulieren
+      if (body.sleepState !== CANNON.Body.SLEEPING) {
+        allStable = false;
+        continue;
+      }
+
+      const result = getDiceResult(body);
+
+      // Edge case → wieder aufwecken
+      if (result === 0) {
+        body.allowSleep = true;
+        body.wakeUp();
+        allStable = false;
+      }
+    }
+
+    if (allStable) break;
+  }
+
+  return diceBodies.map((body) => getDiceResult(body));
+
 }
 
 function getDiceResult(body) {
