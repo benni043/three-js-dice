@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" class="no-js">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Three.js Dice Roller | Codrops</title>
+
+        <script type="importmap">
+            {
+                "imports": {
+                    "three": "https://unpkg.com/three@0.138.0/build/three.module.js",
+                    "three/addons/": "https://unpkg.com/three@0.138.0/examples/jsm/"
+                }
+            }
+        </script>
+        <script type="module" src="./js/main.js"></script>
+        <script type="module" src="./js/backend.js"></script>
+    </head>
+    <body>
+        <div class="ui-controls">
+            <div class="score">Score: <span id="score-result"></span></div>
+            <button id="roll-btn">Throw the dice</button>
+            <button id="backend-btn">backend button</button>
+        </div>
+
+        <canvas id="canvas"></canvas>
+    </body>
+</html>
