@@ -26,7 +26,7 @@ initPhysics();
 initScene();
 
 window.addEventListener("resize", updateSceneSize);
-rollBtn.addEventListener("click", () => throwDice(3));
+rollBtn.addEventListener("click", () => throwDice(2345));
 
 function initScene() {
   renderer = new THREE.WebGLRenderer({
@@ -68,7 +68,7 @@ function initScene() {
     addDiceEvents(diceArray[i]);
   }
 
-  throwDice(3);
+  throwDice(2345);
 
   render();
 }
