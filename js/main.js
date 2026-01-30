@@ -68,8 +68,6 @@ function initScene() {
     addDiceEvents(diceArray[i]);
   }
 
-  const x = 0;
-
   throwDice(2345);
 
   render();
